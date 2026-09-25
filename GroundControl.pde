@@ -26,3 +26,11 @@ void keyReleased() {
         game.increaseSimulationSpeed();
     }
 }
+
+void mouseDragged() {
+    game.panCamera(mouseX - pmouseX, mouseY - pmouseY);
+}
+
+void mouseWheel(processing.event.MouseEvent event) {
+    game.zoomCamera(event.getCount(), mouseX, mouseY);
+}

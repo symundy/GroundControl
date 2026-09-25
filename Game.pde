@@ -1,7 +1,11 @@
 
 class Game {
   
+  World world;
+  
   GameClock clock;
+  
+  Camera camera;
   
   GameState state = GameState.PLAYING;
   
@@ -9,6 +13,10 @@ class Game {
   
   Game() {
     clock = new GameClock();
+    world = new World();
+    camera = new Camera();
+    camera.x = world.worldWidth / 2;
+    camera.y = world.worldHeight / 2;
     lastMillis = millis();
   }
   
@@ -20,6 +28,8 @@ class Game {
     if (state == GameState.PLAYING) {
         clock.update(realDeltaSeconds);
     }
+
+    camera.constrainToWorld(world.worldWidth, world.worldHeight);
 
     switch (state) {
     case MENU:
@@ -70,7 +80,7 @@ class Game {
 
     void renderPlaying() {
       background(30);
-  
+      renderWorld(world, camera);
       fill(255);
       textAlign(LEFT, TOP);
       textSize(24);
@@ -88,6 +98,7 @@ class Game {
 
     void renderPaused() {
         background(30);
+        
 
         fill(255);
         textAlign(CENTER, CENTER);
@@ -109,5 +120,29 @@ class Game {
     
     void decreaseSimulationSpeed() {
         clock.decreaseSpeed();
+    }
+    
+    void panCamera(float dx, float dy) {
+      camera.move(-dx / camera.zoom, -dy / camera.zoom);
+    }
+    
+    void zoomCamera(float amount, float mouseX, float mouseY) {
+  
+      float oldZoom = camera.zoom;
+  
+      float worldMouseX =
+          camera.x + (mouseX - width / 2) / oldZoom;
+  
+      float worldMouseY =
+          camera.y + (mouseY - height / 2) / oldZoom;
+  
+      camera.zoom *= pow(0.9, amount);
+      camera.zoom = constrain(camera.zoom, 0.5, 3.0);
+  
+      camera.x =
+          worldMouseX - (mouseX - width / 2) / camera.zoom;
+  
+      camera.y =
+          worldMouseY - (mouseY - height / 2) / camera.zoom;
     }
 }
