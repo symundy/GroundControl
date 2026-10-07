@@ -6,7 +6,7 @@ class GameClock {
     // How fast simulation time passes relative to real time.
     float speed = 1.0;
     
-    float maxSpeed = 500.0;
+    float maxSpeed = 134217728.0;
 
     void update(float realDeltaSeconds) {
         totalSeconds += realDeltaSeconds * speed;
@@ -36,12 +36,14 @@ class GameClock {
         return speed;
     }
     void increaseSpeed() {
-      speed *= 2.0;
       speed = min(speed * 2.0, maxSpeed);
     }
     
     void decreaseSpeed() {
-        speed /= 2.0;
         speed = max(speed / 2.0, 1);
+    }
+    
+    float getSimulationDelta(float realDeltaSeconds) {
+      return realDeltaSeconds * speed;
     }
 }

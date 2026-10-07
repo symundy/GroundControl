@@ -28,9 +28,19 @@ void keyReleased() {
 }
 
 void mouseDragged() {
-    game.panCamera(mouseX - pmouseX, mouseY - pmouseY);
+    if (dist(mouseX, mouseY, pmouseX, pmouseY) > 2) {
+        game.dragCamera(mouseX - pmouseX, mouseY - pmouseY);
+    }
 }
 
 void mouseWheel(processing.event.MouseEvent event) {
-    game.zoomCamera(event.getCount(), mouseX, mouseY);
+  game.zoomCamera(event.getCount(), mouseX, mouseY);
+}
+
+void mousePressed() {
+  game.beginCameraDrag(mouseX, mouseY);
+}
+
+void mouseReleased() {
+  game.endMouseInteraction(mouseX, mouseY);
 }
